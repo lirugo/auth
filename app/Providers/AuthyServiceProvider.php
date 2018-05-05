@@ -27,7 +27,7 @@ class AuthyServiceProvider extends ServiceProvider
     {
         $this->app->singleton('authy', function(){
             $client = new AuthyApi(env('AUTHY_API_KEY'));
-            return new AuthyService();
+            return new AuthyService($client);
         });
     }
 }
