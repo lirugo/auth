@@ -27,3 +27,8 @@ Route::get('/auth/token', 'Auth\AuthTokenController@getToken');
 Route::post('/auth/token', 'Auth\AuthTokenController@postToken');
 
 Route::get('/auth/token/resend', 'Auth\AuthTokenController@getResend');
+
+Route::group(['middleware' => 'auth'], function(){
+    Route::get('/settings/twofactor', 'Auth\TwoFactorSettingController@index');
+    Route::post('/settings/twofactor', 'Auth\TwoFactorSettingController@update');
+});

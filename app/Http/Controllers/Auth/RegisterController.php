@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Facades\Authy;
 use App\User;
 use App\Http\Controllers\Controller;
 use http\Env\Request;
@@ -64,10 +65,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $user = new User();
+        $user->name = $data['name'];
+        $user->phone_number = $data['phone_number'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->authy_id = Authy::registerUser($user);
+        dd($data);
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'authy_id' => Authy::registerUser($data)
         ]);
     }
 }

@@ -39,4 +39,32 @@ class User extends Authenticatable
         return $this->two_factor_type !== 'sms';
     }
 
+    public function hasTwoFactorType($type){
+        return $this->two_factor_type === $type;
+    }
+
+    public function hasDiallingCode($diallingCodeId){
+        if($this->hasPhoneNumber() === false){
+            return false;
+        }
+        return $this->phoneNumber->diallingCode->id === $diallingCodeId;
+    }
+
+    public function hasPhoneNumber(){
+        return $this->phoneNumber() == null;
+    }
+
+    public function updatePhoneNumber($phone, $phoneDiallingCode){
+        $this->phoneNumber()->delete();
+
+        return $this->phoneNumber()->create([
+            'phone_number' => $phone,
+            'dialling_code_id' => $phoneDiallingCode,
+        ]);
+    }
+
+    public function registeredForTwoFactorAuthentication(){
+        return $this->authy_id !== null;
+    }
+
 }
